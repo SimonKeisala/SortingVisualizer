@@ -1,0 +1,23 @@
+.array-container {
+  display: flex;
+  margin: 10px;
+
+}
+
+.array-item {
+  width: 3px;
+  min-width: 3px;
+  float: left;
+  margin-left: 0px;
+  margin-right: 0px;
+  background-color: black;
+  height: 100px;
+}
+
+.swapped {
+  background-color: red;
+}
+
+.compared {
+  background-color: blue;
+}
