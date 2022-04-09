@@ -6,9 +6,37 @@
   flex-direction: row;
 }
 
+.AppHeader {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  background-color: aliceblue;
+}
+
+.AppHeader .item {
+  min-width: 120px;
+  background-color: white;
+}
+
+.AppHeader button {
+  min-height: 100%;
+  min-width: 120px;
+}
+
 .App-intro {
   font-size: large;
 }
+
+.algorithm {
+  padding: 5px;
+  width: 420px;
+  white-space: pre;
+  text-align: left;
+  flex: 1;
+
+  background-color: aliceblue;
+}
+
 
 @keyframes App-logo-spin {
   from {

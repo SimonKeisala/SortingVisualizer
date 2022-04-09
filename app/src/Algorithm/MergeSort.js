@@ -4,8 +4,6 @@ import AbstractSort from "./AbstractSort"
 class MergeSort extends AbstractSort {
     sort(array) {
         // Create out-of-place array for sorting
-        this.array = []
-        this.array[array.length - 1] = 0
         this.sort_section(array, 0, array.length - 1);
     }
 
@@ -17,22 +15,23 @@ class MergeSort extends AbstractSort {
 
         let leftIdx = start;
         let rightIdx = middle + 1;
-        for (let i = start; i <= end; ++i) {
+        let ext_array = []
+        for (let i = 0; i <= end - start; ++i) {
             if (leftIdx <= middle) {
                 if (rightIdx <= end && this.lt(array, rightIdx, leftIdx)) {
-                    this.array[i] = this.read(array, rightIdx);
+                    ext_array[i] = this.read(array, rightIdx);
                     rightIdx += 1;
                 } else {
-                    this.array[i] = this.read(array, leftIdx);
+                    ext_array[i] = this.read(array, leftIdx);
                     leftIdx += 1;
                 }
             } else {
-                this.array[i] = this.read(array, rightIdx);
+                ext_array[i] = this.read(array, rightIdx);
                 rightIdx += 1;
             }
         }
-        for (let i = start; i <= end; ++i) {
-            this.write(array, i, this.array[i]);
+        for (let i = 0; i <= end - start; ++i) {
+            this.write(array, i + start, ext_array[i]);
         }
     }
 }

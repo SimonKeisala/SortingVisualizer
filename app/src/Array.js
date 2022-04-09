@@ -86,21 +86,23 @@ class Array extends Component {
         return this.state.current_reads.has(index) ? "read" :
             this.state.current_writes.has(index) ? "written" : ""
     }
+
     render() {
         let itemWidth = (this.state.width - 500) / this.state.array.length;
-        let itemHeight = (this.state.height - 180) / this.state.array.length * this.state.heightMult;
+        let contentHeight = (this.state.height - 100) * this.state.heightMult - 49;
+        let itemHeight = contentHeight / this.state.array.length;
         let items = this.state.array.map((item, index) =>
-            <div key={index} style={{ width: itemWidth, height: item * itemHeight }} className={"array-item " + this.item_class(index)}></div >)
+            <div key={index} style={{ width: itemWidth, height: item * itemHeight }} className={"item " + this.item_class(index)}></div >)
         return (
-            <>
+            <div className="Array">
                 <div style={{ textAlign: "left" }}>
                     <span style={{ paddingLeft: 10, paddingRight: 10 }}>Read: {this.state.total_reads}</span>
                     <span>Write: {this.state.total_writes}</span>
                 </div>
-                <div className="array-container">
+                <div className="container">
                     {items}
                 </div>
-            </>
+            </div>
         )
     }
 

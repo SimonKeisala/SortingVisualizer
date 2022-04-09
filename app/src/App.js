@@ -12,7 +12,7 @@ import { FormControl, MenuItem, Select, InputLabel, Button } from '@mui/material
 function Dropdown(label, key, values, onChange) {
   let items = values.map((item) => <MenuItem key={item.name} value={item.data}>{item.name}</MenuItem>);
   return (
-    <FormControl>
+    <FormControl className='item'>
       <InputLabel id="dropdown-label">{label}</InputLabel>
       <Select
         labelId="dropdown-label"
@@ -51,14 +51,17 @@ class App extends Component {
       HeapSort, BubbleSort, InsertionSort, SelectionSort, QuickSort, MergeSort]
     return (
       <>
-        <div style={{ margin: "20px" }}>
+        <div className="AppHeader">
+          <FormControl>
+            <Button variant="contained" className='button' onClick={this.runAlgorithm.bind(this)}>Sort</Button>
+          </FormControl>
           {
-            Dropdown("Algorithm", this.state.algorithm,
+            Dropdown("Algorithm 1", this.state.algorithm,
               [...algorithms.map(item => ({ data: item, name: item.name }))],
               this.updateAlgorithm.bind(this))
           }
           {
-            Dropdown("Algorithm2", this.state.algorithm2,
+            Dropdown("Algorithm 2", this.state.algorithm2,
               [{ data: "off", name: "Disabled" }, ...algorithms.map(item => ({ data: item, name: item.name }))],
               this.updateAlgorithm2.bind(this))
           }
@@ -78,9 +81,6 @@ class App extends Component {
             { data: 3000, name: "3000" },
             { data: 10000, name: "10000" },
           ], this.updateActionsPerSecond.bind(this))}
-          <FormControl>
-            <Button onClick={this.runAlgorithm.bind(this)}>Sort</Button>
-          </FormControl>
         </div>
         <div className="App">
           <div>
@@ -89,7 +89,7 @@ class App extends Component {
               <Array ref={this.array2}></Array>
             </span>
           </div>
-          <div style={{ padding: "5px", width: "400", whiteSpace: "pre", textAlign: "left" }}><h1>{this.state.algorithm.name}</h1>{this.state.algorithm_details}</div>
+          <div className="algorithm"><h1>{this.state.algorithm.name}</h1>{this.state.algorithm_details}</div>
         </div>
       </>
     );

@@ -1,10 +1,14 @@
-.array-container {
+.Array {
+  margin: 10px;
+}
+
+.container {
   display: flex;
   margin: 10px;
 
 }
 
-.array-item {
+.container .item {
   float: left;
   margin-left: 0px;
   margin-right: 0px;
@@ -12,10 +16,10 @@
   height: 100px;
 }
 
-.array-item.written {
+.item.written {
   background-color: red;
 }
 
-.array-item.read {
+.item.read {
   background-color: blue;
 }
