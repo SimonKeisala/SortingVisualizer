@@ -5,8 +5,6 @@
 }
 
 .array-item {
-  width: 3px;
-  min-width: 3px;
   float: left;
   margin-left: 0px;
   margin-right: 0px;
@@ -14,10 +12,10 @@
   height: 100px;
 }
 
-.swapped {
+.array-item.written {
   background-color: red;
 }
 
-.compared {
+.array-item.read {
   background-color: blue;
 }

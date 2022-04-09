@@ -4,7 +4,6 @@ class AbstractSort {
         this.comparisons = 0;
         this.swaps = 0;
         this.sort(array.slice());
-        console.log(this.comparisons, this.swaps);
     }
 
     sort(array) {
@@ -28,6 +27,16 @@ class AbstractSort {
         let c = array[a];
         array[a] = array[b];
         array[b] = c;
+    }
+
+    read(array, i) {
+        this.actions.push(["read", i, null])
+        return array[i];
+    }
+
+    write(array, i, value) {
+        this.actions.push(["write", i, value])
+        array[i] = value;
     }
 }
 

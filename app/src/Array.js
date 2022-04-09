@@ -5,11 +5,15 @@ class Array extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            array: [], swapped: new Set(), compared: new Set(), heightMult: 1,
-            comparisons: 0, swaps: 0
+            array: [],
+            heightMult: 1,
+            current_writes: new Set(),
+            current_reads: new Set(),
+            total_reads: 0,
+            total_writes: 0,
         }
-        this.comparisons = 0;
-        this.swaps = 0;
+        this.reads = 0;
+        this.writes = 0;
     }
     setArray(array) {
         this.setState({ array: array });
@@ -22,9 +26,12 @@ class Array extends Component {
         this.start_time = (new Date()).getTime();
         this.actions_per_second = actions_per_second;
         this.action_index = 0;
-        this.comparisons = 0;
-        this.swaps = 0;
-        this.setState({ comparisons: this.comparisons, swaps: this.swaps })
+        this.writes = 0;
+        this.reads = 0;
+        this.setState({
+            total_reads: this.reads,
+            total_writes: this.writes
+        })
         this.handler = setInterval(this.visualization_subroutine.bind(this), 0)
         return this.handler;
     }
@@ -34,38 +41,50 @@ class Array extends Component {
         let end_action = this.actions_per_second * (curr_time - this.start_time) / 1000;
         end_action = Math.floor(Math.min(this.actions.length, end_action));
         let array = this.state.array;
-        let swaps = new Set();
-        let compared = new Set();
-        if (end_action == this.action_index) return;
+        let writes = new Set();
+        let reads = new Set();
         for (let i = this.action_index; i < end_action; ++i) {
             let [type, a, b] = this.actions[i]
-            if (type == "swap") {
+            if (type == "write") {
+                array[a] = b
+                writes.add(a);
+                this.writes += 1;
+            } else if (type == "swap") {
                 let c = array[a]
                 array[a] = array[b]
                 array[b] = c
-                swaps.add(a);
-                swaps.add(b);
-                this.swaps += 2;
-            } else {
-                compared.add(a);
-                compared.add(b);
-                this.comparisons += 2;
+                writes.add(a);
+                writes.add(b);
+                this.writes += 2;
+            } else if (type == "read") {
+                reads.add(a);
+                this.reads += 1;
+            } else if (type == "compare") {
+                reads.add(a);
+                reads.add(b);
+                this.reads += 2;
             }
         }
         this.setState({
-            array: array, swapped: swaps, compared: compared,
-            comparisons: this.comparisons, swaps: this.swaps
+            array: array,
+            current_reads: reads,
+            current_writes: writes,
+            total_reads: this.reads,
+            total_writes: this.writes
         })
         this.action_index = end_action;
         if (end_action == this.actions.length) {
             clearInterval(this.handler);
-            this.setState({ array: array, swapped: new Set(), compared: new Set() })
+            this.setState({
+                current_reads: new Set(),
+                current_writes: new Set(),
+            })
         }
     }
 
     item_class(index) {
-        return this.state.swapped.has(index) ? "swapped" :
-            this.state.compared.has(index) ? "compared" : ""
+        return this.state.current_reads.has(index) ? "read" :
+            this.state.current_writes.has(index) ? "written" : ""
     }
     render() {
         let itemWidth = (this.state.width - 500) / this.state.array.length;
@@ -75,8 +94,8 @@ class Array extends Component {
         return (
             <>
                 <div style={{ textAlign: "left" }}>
-                    <span style={{ paddingLeft: 10, paddingRight: 10 }}>Read: {this.state.comparisons}</span>
-                    <span>Write: {this.state.swaps}</span>
+                    <span style={{ paddingLeft: 10, paddingRight: 10 }}>Read: {this.state.total_reads}</span>
+                    <span>Write: {this.state.total_writes}</span>
                 </div>
                 <div className="array-container">
                     {items}

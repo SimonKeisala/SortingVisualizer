@@ -6,8 +6,8 @@ import InsertionSort from "./Algorithm/InsertionSort";
 import HeapSort from "./Algorithm/HeapSort";
 import SelectionSort from "./Algorithm/SelectionSort";
 import QuickSort from "./Algorithm/QuickSort";
+import MergeSort from "./Algorithm/MergeSort";
 import { FormControl, MenuItem, Select, InputLabel, Button } from '@mui/material';
-import { textAlign } from '@mui/material/node_modules/@mui/system';
 
 function Dropdown(label, key, values, onChange) {
   let items = values.map((item) => <MenuItem key={item.name} value={item.data}>{item.name}</MenuItem>);
@@ -48,7 +48,7 @@ class App extends Component {
   }
   render() {
     let algorithms = [
-      HeapSort, BubbleSort, InsertionSort, SelectionSort, QuickSort]
+      HeapSort, BubbleSort, InsertionSort, SelectionSort, QuickSort, MergeSort]
     return (
       <>
         <div style={{ margin: "20px" }}>
@@ -67,6 +67,9 @@ class App extends Component {
               { data: 100, name: "100" },
               { data: 200, name: "200" },
               { data: 300, name: "300" },
+              { data: 500, name: "500" },
+              { data: 1000, name: "1000" },
+              { data: 5000, name: "5000" },
             ], this.updateListSize.bind(this))}
           {Dropdown("ActionsPerSecond", this.state.actions_per_second, [
             { data: 100, name: "100" },
