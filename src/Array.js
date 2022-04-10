@@ -99,7 +99,7 @@ class Array extends Component {
                     <span style={{ paddingLeft: 10, paddingRight: 10 }}>Read: {this.state.total_reads}</span>
                     <span>Write: {this.state.total_writes}</span>
                 </div>
-                <div className="container">
+                <div className="container" style={{ height: contentHeight }}>
                     {items}
                 </div>
             </div>
