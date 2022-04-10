@@ -72,7 +72,6 @@ class App extends Component {
               { data: 300, name: "300" },
               { data: 500, name: "500" },
               { data: 1000, name: "1000" },
-              { data: 5000, name: "5000" },
             ], this.updateListSize.bind(this))}
           {Dropdown("ActionsPerSecond", this.state.actions_per_second, [
             { data: 100, name: "100" },
