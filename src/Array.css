@@ -10,6 +10,7 @@
 
 .container .item {
   float: left;
+  align-self: flex-end;
   margin-left: 0px;
   margin-right: 0px;
   background-color: black;

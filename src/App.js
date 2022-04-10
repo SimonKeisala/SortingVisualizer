@@ -153,7 +153,7 @@ class App extends Component {
 
 function load(items) {
   let array = []
-  for (let i = 0; i < items; ++i) {
+  for (let i = 1; i <= items; ++i) {
     array.push(i);
   }
   return array;
