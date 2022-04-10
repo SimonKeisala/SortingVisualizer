@@ -81,6 +81,7 @@ class App extends Component {
             { data: 3000, name: "3000" },
             { data: 10000, name: "10000" },
           ], this.updateActionsPerSecond.bind(this))}
+          <a href="https://github.com/SimonKeisala/SortingVisualizer">Source Code</a>
         </div>
         <div className="App">
           <div>

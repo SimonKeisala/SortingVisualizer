@@ -18,6 +18,10 @@
   background-color: white;
 }
 
+.AppHeader>a {
+  align-self: flex-end;
+}
+
 .AppHeader button {
   min-height: 100%;
   min-width: 120px;
