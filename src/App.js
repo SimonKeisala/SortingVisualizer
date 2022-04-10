@@ -8,6 +8,7 @@ import SelectionSort from "./Algorithm/SelectionSort";
 import QuickSort from "./Algorithm/QuickSort";
 import MergeSort from "./Algorithm/MergeSort";
 import { FormControl, MenuItem, Select, InputLabel, Button } from '@mui/material';
+import ShellSort from './Algorithm/ShellSort';
 
 function Dropdown(label, key, values, onChange) {
   let items = values.map((item) => <MenuItem key={item.name} value={item.data}>{item.name}</MenuItem>);
@@ -48,7 +49,7 @@ class App extends Component {
   }
   render() {
     let algorithms = [
-      HeapSort, BubbleSort, InsertionSort, SelectionSort, QuickSort, MergeSort]
+      HeapSort, BubbleSort, InsertionSort, SelectionSort, QuickSort, MergeSort, ShellSort]
     return (
       <>
         <div className="AppHeader">
