@@ -7,19 +7,20 @@
   margin: 10px;
 }
 
-.container .item {
+.container .bar-item {
   float: left;
   align-self: flex-end;
   margin-left: 0px;
   margin-right: 0px;
   background-color: black;
   height: 100px;
+  flex: 1;
 }
 
-.item.written {
-  background-color: red;
-}
-
-.item.read {
+.bar-item.read {
   background-color: blue;
+}
+
+.bar-item.written {
+  background-color: red;
 }

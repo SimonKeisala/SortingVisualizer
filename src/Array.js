@@ -4,22 +4,23 @@ import "./Array.css";
 class Array extends Component {
     constructor(props) {
         super(props);
+        this.height_mult = 1;
         this.state = {
             array: [],
-            heightMult: 1,
-            current_writes: new Set(),
-            current_reads: new Set(),
-            total_reads: 0,
-            total_writes: 0,
         }
+        this.array_container = React.createRef();
+        this.read_number = React.createRef();
+        this.write_number = React.createRef();
         this.reads = 0;
         this.writes = 0;
+        this.bars_to_clear = [];
     }
     setArray(array) {
         this.setState({ array: array });
     }
     setHeightMult(mult) {
-        this.setState({ heightMult: mult })
+        this.height_mult = mult;
+        this.updateContainerDimensions();
     }
     visualize(actions, actions_per_second) {
         this.actions = actions;
@@ -28,81 +29,75 @@ class Array extends Component {
         this.action_index = 0;
         this.writes = 0;
         this.reads = 0;
-        this.setState({
-            total_reads: this.reads,
-            total_writes: this.writes
-        })
         this.handler = setInterval(this.visualization_subroutine.bind(this), 0)
         return this.handler;
     }
 
     visualization_subroutine() {
+        for (let bar of this.bars_to_clear) {
+            bar.className = "bar-item";
+        }
+        this.bars_to_clear = [];
+
         let curr_time = (new Date()).getTime();
         let end_action = this.actions_per_second * (curr_time - this.start_time) / 1000;
         end_action = Math.floor(Math.min(this.actions.length, end_action));
-        let array = this.state.array;
-        let writes = new Set();
-        let reads = new Set();
+        let bars = this.array_container.current.children;
         for (let i = this.action_index; i < end_action; ++i) {
             let [type, a, b] = this.actions[i]
             if (type == "write") {
-                array[a] = b
-                writes.add(a);
-                this.writes += 1;
+                this.write_value(bars, a, b);
             } else if (type == "swap") {
-                let c = array[a]
-                array[a] = array[b]
-                array[b] = c
-                writes.add(a);
-                writes.add(b);
-                this.writes += 2;
+                let c = this.state.array[a];
+                this.write_value(bars, a, this.state.array[b]);
+                this.write_value(bars, b, c);
             } else if (type == "read") {
-                reads.add(a);
-                this.reads += 1;
+                this.read_value(bars, a);
             } else if (type == "compare") {
-                reads.add(a);
-                reads.add(b);
-                this.reads += 2;
+                this.read_value(bars, a);
+                this.read_value(bars, b);
             }
         }
-        this.setState({
-            array: array,
-            current_reads: reads,
-            current_writes: writes,
-            total_reads: this.reads,
-            total_writes: this.writes
-        })
+        this.write_number.current.innerHTML = this.writes;
+        this.read_number.current.innerHTML = this.reads;
         this.action_index = end_action;
         if (end_action == this.actions.length) {
             clearInterval(this.handler);
-            this.setState({
-                current_reads: new Set(),
-                current_writes: new Set(),
-            })
+            for (let bar of this.bars_to_clear) {
+                bar.className = "bar-item";
+            }
+            this.bars_to_clear = [];
         }
     }
 
-    item_class(index) {
-        return this.state.current_reads.has(index) ? "read" :
-            this.state.current_writes.has(index) ? "written" : ""
+    write_value(bars, index, value) {
+        bars[index].style.height = `${100 * value / bars.length}%`
+        bars[index].className += " written";
+        this.bars_to_clear.push(bars[index])
+        this.state.array[index] = value;
+        this.writes += 1;
+    }
+    read_value(bars, index) {
+        bars[index].className += " read";
+        this.bars_to_clear.push(bars[index])
+        this.reads += 1;
     }
 
     render() {
-        let itemWidth = (this.state.width - 500) / this.state.array.length;
-        let contentHeight = (this.state.height - 100) * this.state.heightMult - 49;
-        let itemHeight = contentHeight / this.state.array.length;
         let items = this.state.array.map((item, index) =>
-            <div key={index} style={{ width: itemWidth, height: item * itemHeight }} className={"item " + this.item_class(index)}></div >)
+            <div key={index} style={{
+                height: `${100 * item / this.state.array.length}%`
+            }} className={"bar-item"}></div >)
         return (
             <div className="Array">
                 <div style={{ textAlign: "left" }}>
-                    <span style={{ paddingLeft: 10, paddingRight: 10 }}>Read: {this.state.total_reads}</span>
-                    <span>Write: {this.state.total_writes}</span>
+                    <span style={{ paddingLeft: 10, paddingRight: 10 }}>Read: <span ref={this.read_number}>0</span></span>
+                    <span>Write: <span ref={this.write_number}>0</span></span>
                 </div>
-                <div className="container" style={{ height: contentHeight }}>
+                <div ref={this.array_container} className="container">
                     {items}
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -116,7 +111,14 @@ class Array extends Component {
     }
 
     updateWindowDimensions() {
-        this.setState({ width: window.innerWidth, height: window.innerHeight })
+        this.window_width = window.innerWidth
+        this.window_height = window.innerHeight
+        this.updateContainerDimensions();
+    }
+
+    updateContainerDimensions() {
+        this.array_container.current.style.width = `${this.window_width - 500}px`;
+        this.array_container.current.style.height = `${(this.window_height - 100) * this.height_mult - 49}px`;
     }
 }
 
